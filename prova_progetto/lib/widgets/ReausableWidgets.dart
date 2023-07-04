@@ -18,9 +18,12 @@ class ReusableWidgets {
 
   static Widget buildButton(String text, VoidCallback onPressed) {
     return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.green),
+      ),
       onPressed: onPressed,
-      child: Text(text),
+      child: Text(text, style: const TextStyle(color: Colors.white)),  // Questo cambia il colore del testo
     );
   }
+
 }

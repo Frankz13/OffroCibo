@@ -1,11 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/screens/Registrazione.dart';
-
 import 'package:prova_progetto/screens/PrimaPagina.dart';
 import 'package:prova_progetto/screens/SecondaPagina.dart';
+import 'package:prova_progetto/screens/UserPage.dart';
+import 'package:prova_progetto/widgets/form.dart';
+import 'package:prova_progetto/widgets/FormLogin.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -16,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'OffroCibo_offerte',
+      title: 'OffroCibo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         brightness: Brightness.light,
@@ -30,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/seconda': (context) => SecondaPagina(),
         '/registrazione' : (context) => Registrazione(),
         '/login' : (context) => LoginPage(),
+        '/userPage' : (context) => UserPage(),
       },
     );
   }
@@ -48,6 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Registrazione();
+    return const LoginPage();
   }
 }

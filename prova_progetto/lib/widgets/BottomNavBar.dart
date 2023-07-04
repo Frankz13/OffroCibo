@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prova_progetto/screens/PrimaPagina.dart';
 import 'package:prova_progetto/screens/SecondaPagina.dart';
+import 'package:prova_progetto/screens/UserPage.dart';
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
 
@@ -20,7 +21,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SecondaPagina()));},
+              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => UserPage()));},
               icon: const Icon(Icons.food_bank),
               color: Colors.deepPurple,
             ),

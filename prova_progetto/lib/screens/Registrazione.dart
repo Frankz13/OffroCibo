@@ -1,8 +1,12 @@
+import 'dart:math';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/screens/PrimaPagina.dart';
 import 'package:prova_progetto/widgets/ReausableWidgets.dart';
 import 'package:prova_progetto/widgets/form.dart';
+import 'package:prova_progetto/main.dart';
 
 class Registrazione extends StatefulWidget {
   const Registrazione({super.key});
@@ -33,7 +37,7 @@ class _RegistrazioneState extends State<Registrazione> {
             borderRadius: BorderRadius.circular(20),
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxHeight: 700,
+                maxHeight: 750,
                 maxWidth: 350,
               ),
               child: Container(
@@ -41,32 +45,43 @@ class _RegistrazioneState extends State<Registrazione> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text("Benvenuto!",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       const Text("Registrati per iniziare",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [RegistrationForm()]
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      // Row(
-                      //   children: [
-                      //     Expanded(child: ReusableWidgets.buildButton("REGISTRATI", () {
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(builder: (context) => PrimapPagina())
-                      //       );})),
-                      //   ],
-                      // ),
-                      const SizedBox(height: 20),
+
+                      const SizedBox(height:8),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Hai già un account?"),
-                          ReusableWidgets.buildButton("Login", () {Navigator.pop(context);}),
+
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              text: 'Hai già un account? ',
+                              children: [
+                                TextSpan(
+                                  text: 'Log in',
+                                  style: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.green
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushNamed(context, '/login');
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],

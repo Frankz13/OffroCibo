@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prova_progetto/screens/Registrazione.dart';
 import 'package:prova_progetto/widgets/cards/widget_card.dart';
@@ -19,30 +20,34 @@ class _PrimapPaginaState extends State<PrimapPagina> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: const SingleChildScrollView(
-        child: Center(
-          child: Column(
+      appBar: AppBar(title: const Text(
+      "Bentornato! Le tue offerte:",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(onPressed: (){
+            FirebaseAuth.instance.signOut();}, icon: const Icon(Icons.logout),),
+            ],
+            ),
+            backgroundColor: Colors.white,
+            body: const SingleChildScrollView(
+            child: Center(
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 50.0),
-                child: Text(
-                  "Bentornato! Le tue offerte:",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-              ),
-              CardOfferta(),
-              CardOfferta(),
+
+            CardOfferta(),
+            CardOfferta(),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomNavBar(),
-      floatingActionButton: ClipOval(
-        child: FloatingActionButton(
-          onPressed: (){Navigator.pushNamed(context, '/login');},
-          child: const Icon(Icons.add),
+            ),
+            ),
+            ),
+            bottomNavigationBar: const BottomNavBar(),
+            floatingActionButton: ClipOval(
+            child: FloatingActionButton(
+            onPressed: () => FirebaseAuth.instance.signOut(),
+            child: const Icon(Icons.sign_language_outlined)
+            ,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

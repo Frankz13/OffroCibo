@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "776238725853",
+    "project_id": "offrocibo",
+    "storage_bucket": "offrocibo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776238725853:android:2d0830136840994b69f934",
+        "android_client_info": {
+          "package_name": "FrankZ.example.prova_progetto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "776238725853-i34nuoftham7keo3qcho6g2902p0locr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx9XrhafvNzYnfJ-seScuUqMSXbhc3jjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776238725853-i34nuoftham7keo3qcho6g2902p0locr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

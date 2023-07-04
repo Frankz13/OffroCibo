@@ -59,11 +59,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
               if (value!.isEmpty) {
                 return 'Please enter an email';
               }
-              // You can add additional email validation logic here if needed
+
+              String emailPattern = r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-zA-Z]{2,})$';
+              RegExp regExp = RegExp(emailPattern);
+
+              if(!regExp.hasMatch(value)) {
+                return 'Please enter a valid email address';
+              }
               return null;
             },
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
+
           TextFormField(
             controller: _nameController,
             decoration: InputDecoration(
@@ -82,7 +89,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           TextFormField(
             controller: _surnameController,
             decoration: InputDecoration(
@@ -100,14 +107,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           TextFormField(
             controller: _passwordController,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)
+                borderRadius: BorderRadius.circular(10),
               ),
               labelText: 'Password',
             ),
@@ -116,11 +123,31 @@ class _RegistrationFormState extends State<RegistrationForm> {
               if (value!.isEmpty) {
                 return 'Please enter a password';
               }
-              // You can add additional password validation logic here if needed
+
+              // Controllo per almeno 8 caratteri
+              if (value.length < 8) {
+                return 'Must be at least 8 characters long';
+              }
+
+              // Controllo per almeno un carattere speciale
+              String specialCharPattern = r'(?=.*[@#$%^&+=!])';
+              RegExp specialCharRegExp = RegExp(specialCharPattern);
+              if (!specialCharRegExp.hasMatch(value)) {
+                return 'Must contain at least one special character';
+              }
+
+              // Controllo per almeno un numero
+              String numberPattern = r'(?=.*[0-9])';
+              RegExp numberRegExp = RegExp(numberPattern);
+              if (!numberRegExp.hasMatch(value)) {
+                return 'Must contain at least one number';
+              }
+
               return null;
             },
           ),
-          SizedBox(height: 16),
+
+          SizedBox(height: 8),
           TextFormField(
             controller: _confirmPasswordController,
             decoration: InputDecoration(
@@ -142,13 +169,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 16),
-
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
-
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
                   onPressed: _submitForm,
                   child: Text('Registrati'),
