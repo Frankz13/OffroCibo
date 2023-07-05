@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import '../screens/PrimaPagina.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -32,7 +29,7 @@ class _LoginFormState extends State<LoginForm> {
             email: email,
             password: password
         );
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException {
         // handle error here
       }
     }
@@ -68,7 +65,7 @@ class _LoginFormState extends State<LoginForm> {
                     return null;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 TextFormField(
                   controller: _passwordController,
@@ -101,7 +98,7 @@ class _LoginFormState extends State<LoginForm> {
                             backgroundColor: MaterialStateProperty.all(Colors
                                 .green)),
                         onPressed: _submitForm,
-                        child: Text('Login'),
+                        child: const Text('Login'),
                       ),
                     ),
                   ],

@@ -69,7 +69,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           TextFormField(
             controller: _nameController,
@@ -89,7 +89,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _surnameController,
             decoration: InputDecoration(
@@ -107,7 +107,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               return null;
             },
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _passwordController,
             decoration: InputDecoration(
@@ -147,7 +147,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             },
           ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextFormField(
             controller: _confirmPasswordController,
             decoration: InputDecoration(
@@ -175,7 +175,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 child: ElevatedButton(
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
                   onPressed: _submitForm,
-                  child: Text('Registrati'),
+                  child: const Text('Registrati'),
                 ),
               ),
             ],

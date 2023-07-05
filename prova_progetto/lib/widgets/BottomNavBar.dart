@@ -21,12 +21,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => UserPage()));},
+              onPressed: (){Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PrimapPagina()));},
               icon: const Icon(Icons.food_bank),
               color: Colors.deepPurple,
             ),
             IconButton(
-              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => PrimapPagina()));},
+              onPressed: (){Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const UserPage()));},
               icon: const Icon(Icons.person),
               color: Colors.deepPurple,
             ),

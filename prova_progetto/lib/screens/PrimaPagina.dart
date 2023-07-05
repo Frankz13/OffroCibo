@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:prova_progetto/screens/Registrazione.dart';
+import 'package:prova_progetto/screens/AddingProductPage.dart';
+import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/widgets/cards/widget_card.dart';
 import 'package:prova_progetto/widgets/BottomNavBar.dart';
 
@@ -26,7 +27,10 @@ class _PrimapPaginaState extends State<PrimapPagina> {
         ),
         actions: [
           IconButton(onPressed: (){
-            FirebaseAuth.instance.signOut();}, icon: const Icon(Icons.logout),),
+            FirebaseAuth.instance.signOut();
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));}, icon: const Icon(Icons.logout),
+          ),
             ],
             ),
             backgroundColor: Colors.white,
@@ -45,8 +49,9 @@ class _PrimapPaginaState extends State<PrimapPagina> {
             bottomNavigationBar: const BottomNavBar(),
             floatingActionButton: ClipOval(
             child: FloatingActionButton(
-            onPressed: () => FirebaseAuth.instance.signOut(),
-            child: const Icon(Icons.sign_language_outlined)
+            onPressed: (){Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddingProductPage()));},
+            child: const Icon(Icons.add)
             ,
         ),
       ),

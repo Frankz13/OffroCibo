@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:prova_progetto/screens/PrimaPagina.dart';
-import 'package:prova_progetto/screens/Registrazione.dart';
+
 import 'package:prova_progetto/widgets/FormLogin.dart';
-import 'package:prova_progetto/widgets/ReausableWidgets.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
