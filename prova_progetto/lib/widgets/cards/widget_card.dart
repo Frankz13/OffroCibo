@@ -8,14 +8,14 @@ class CardOfferta extends StatefulWidget {
 }
 
 class _CardOffertaState extends State<CardOfferta> {
-  bool isFavourite = false;
-
-
-  void _liked() {
-    setState(() {
-      isFavourite = !isFavourite;
-    });
-  }
+  // bool isFavourite = false;
+  //
+  //
+  // void _liked() {
+  //   setState(() {
+  //     isFavourite = !isFavourite;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +76,12 @@ class _CardOffertaState extends State<CardOfferta> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        _liked();
+                        // _liked();
                       },
-                      child: isFavourite
-                          ? const Icon(Icons.mode, color: Colors.red)
-                          : const Icon(Icons.mode_edit_outline_outlined),
+                      child: const Icon(Icons.edit_note),
+                      // child: isFavourite
+                      //     ? const Icon(Icons.mode, color: Colors.red)
+                      //     : const Icon(Icons.mode_edit_outline_outlined),
                     ),
                     ElevatedButton(
                       onPressed: () {},

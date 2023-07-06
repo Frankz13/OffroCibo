@@ -1,12 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:prova_progetto/screens/Login.dart';
-import 'package:prova_progetto/screens/PrimaPagina.dart';
-import 'package:prova_progetto/widgets/ReausableWidgets.dart';
 import 'package:prova_progetto/widgets/form.dart';
-import 'package:prova_progetto/main.dart';
+
 
 class Registrazione extends StatefulWidget {
   const Registrazione({super.key});

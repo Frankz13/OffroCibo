@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:prova_progetto/widgets/ReausableWidgets.dart';
+
 
 class AddingProductPage extends StatefulWidget {
   const AddingProductPage({Key? key}) : super(key: key);
@@ -28,50 +30,50 @@ class _AddingProductPageState extends State<AddingProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Aggiungi un'offerta"),
-      ),
-      body: Scrollbar(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: <Widget>[
-            TextField(
-              controller: controllerNameProduct,
-              decoration: decoration('Nome del prodotto:'),
+        shadowColor: Colors.black,
+        ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          height: 600,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: controllerRestaurantName,
-              decoration: decoration('Nome Ristorante:'),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: controllerRestaurantAddress,
-              decoration: decoration('Indirizzo Ristorante'),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: controllerQuantity,
-              decoration: decoration('Numero porzioni'),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 24),
-            DateTimeField(
-              controller: controllerDate,
-              decoration: decoration("Data di produzione"),
-              format: DateFormat('yyyy-MM-dd'),
-              onShowPicker: (context, currentValue) async {
-                final date = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime(1900),
-                  initialDate: currentValue ?? DateTime.now(),
-                  lastDate: currentValue ?? DateTime.now(),
-                );
-                return date;
-              },
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
+            color: Colors.white,
+            elevation: 50,
+            shadowColor: Colors.black,
+            child: Scrollbar(
+              child: ListView(
+                padding: const EdgeInsets.all(8),
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: Text("Aggiungi un'offerta",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                    )
+                    ),
+                  ),
+                  ReusableWidgets.buildTextField('Nome del prodotto:',
+                      controller: controllerNameProduct),
+                  const SizedBox(height: 16),
+                  ReusableWidgets.buildTextField('Nome Ristorante:',
+                      controller: controllerRestaurantName),
+                  const SizedBox(height: 16),
+                  ReusableWidgets.buildTextField('Indirizzo Ristorante',
+                      controller: controllerRestaurantAddress),
+                  const SizedBox(height: 16),
+                  ReusableWidgets.buildTextField('Numero porzioni',
+                      controller: controllerQuantity,
+                      keyboardType: TextInputType.number),
+                  const SizedBox(height: 16),
+                  ReusableWidgets.buildDateTimeField(
+                      controller: controllerDate,
+                      hint: "Data di produzione"),
+                  const SizedBox(height: 24),
+              ReusableWidgets.buildButton('Create', () {
                 final food = Food(
                   nameProduct: controllerNameProduct.text,
                   quantity: int.parse(controllerQuantity.text),
@@ -81,13 +83,16 @@ class _AddingProductPageState extends State<AddingProductPage> {
                 );
                 createFood(food);
                 Navigator.pop(context);
-              },
-              child: const Text('Create'),
+              }),
+
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );
+
   }
 
   // Widget buildFood(Food food) => ListTile(

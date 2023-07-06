@@ -6,83 +6,129 @@ import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/widgets/BottomNavBar.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+  const UserPage({Key? key}) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
-
-  InputDecoration decoration(String label) {
-    return const InputDecoration();
-  }
-
-  //documnets ids
-
   List<String> docIds = [];
-
-  //get documents ids
 
   Future getDocId() async {
     await FirebaseFirestore.instance.collection('food').get()
         .then((snapshot) => snapshot.docs.forEach((document) {
-          print(document.reference);
-          docIds.add(document.reference.id);
+      // print(document.reference);
+      docIds.add(document.reference.id);
     }));
   }
 
   @override
-
-
   Widget build(BuildContext context) {
-    return   Scaffold(
-      appBar: AppBar(title:  const Text(
-        "Bentornato! Le tue offerte:",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-        actions: [
-          IconButton(onPressed: (){
-            FirebaseAuth.instance.signOut();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginPage()));},
-            icon: const Icon(Icons.logout),
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Ecco le offerte per te:",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: FutureBuilder(
-                  future: getDocId(),
-                  builder: (context, snapshot){
-                return ListView.builder(
-                  itemCount: docIds.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        tileColor: Colors.pink,
-                        title: GetUserName(documentId: docIds[index]),
-                      ),
-                    );
-                  },
-                );
-              }),
+          actions: [
+            IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+              icon: const Icon(Icons.logout),
             ),
           ],
         ),
-      ),
-
-      bottomNavigationBar: const BottomNavBar(),
-
-
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: FutureBuilder(
+                  future: getDocId(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (docIds.isEmpty) {
+                      return const Center(child: Text("Per favore crea un' inserzione"));
+                    } else {
+                      return ListView.builder(
+                        itemCount: docIds.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            color: Colors.orange,
+                            shadowColor: Colors.purple,
+                            elevation: 50,
+                            margin: const EdgeInsets.all(20),
+                            clipBehavior: Clip.hardEdge,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: Image.asset(
+                                    'images/pizza.jpg',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      GetFoodName(documentId: docIds[index]),
+                                      const Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("pizza"),
+                                          Text("pasta"),
+                                          Text("dolci"),
+                                          Text("pesce"),
+                                          Text("carne"),
+                                        ],
+                                      ),
+                                      GetFoodQuantity(documentId: docIds[index]),
+                                      const Text('Ristorante:'),
+                                      GetRestaurantName(documentId: docIds[index]),
+                                      const Text('Indirizzo:'),
+                                      GetRestaurantAddress(documentId: docIds[index]),
+                                      GetFoodDate(documentId: docIds[index]),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Icon(Icons.edit_note),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Icon(Icons.delete_forever),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar:const BottomNavBar(),
     );
   }
-
-
-  }
+}
 

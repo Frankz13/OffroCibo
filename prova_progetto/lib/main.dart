@@ -1,17 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/screens/Registrazione.dart';
-import 'package:prova_progetto/screens/PrimaPagina.dart';
+import 'package:prova_progetto/screens/RestaurantPage.dart';
 import 'package:prova_progetto/screens/SecondaPagina.dart';
 import 'package:prova_progetto/screens/UserPage.dart';
-import 'package:prova_progetto/widgets/form.dart';
-import 'package:prova_progetto/widgets/FormLogin.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) => {
+  runApp(const MyApp())
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       home: const MyHomePage(title: 'OffroCibo_offerte'),
       routes: {
-        '/prima': (context) => PrimapPagina(),
+        '/prima': (context) => RestaurantPage(),
         '/seconda': (context) => SecondaPagina(),
         '/registrazione' : (context) => Registrazione(),
         '/login' : (context) => LoginPage(),

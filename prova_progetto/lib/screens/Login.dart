@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:prova_progetto/screens/PrimaPagina.dart';
-
+import 'package:prova_progetto/screens/RestaurantPage.dart';
 import 'package:prova_progetto/widgets/FormLogin.dart';
 
 
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
-            return const PrimapPagina();
+            return const RestaurantPage();
           } else {
             return Container(
               decoration: const BoxDecoration(
