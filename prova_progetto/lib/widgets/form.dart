@@ -37,7 +37,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
       FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
           .then((userCredential) async {
-        await addUserDetails(firstName, lastName, email);
+        String firebaseAuthUserId = userCredential.user!.uid;
+        await addUserDetails(firstName, lastName, email, firebaseAuthUserId);
         Navigator.pushReplacement(context, PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => const RestaurantPage(),
         ));
@@ -48,12 +49,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
     }
   }
 
-  Future<void> addUserDetails(String firstName, String lastName, String email) async {
+  Future<void> addUserDetails(
+      String firstName,
+      String lastName,
+      String email,
+      String firebaseAuthUserId) async {
     await FirebaseFirestore.instance.collection('users').add({
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
       'food_quantity': 0,
+      'firebase_auth_user_id': firebaseAuthUserId,
     });
   }
 
