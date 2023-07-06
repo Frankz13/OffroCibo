@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prova_progetto/screens/RestaurantPage.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({Key? key}) : super(key: key);
@@ -10,34 +13,52 @@ class RegistrationForm extends StatefulWidget {
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _surnameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-    _nameController.dispose();
-    _surnameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Form validation successful, perform registration logic here
-      String email = _emailController.text;
-      String name = _nameController.text;
-      String surname = _surnameController.text;
-      String password = _passwordController.text;
-      String confirmPassword = _confirmPasswordController.text;
+      String email = _emailController.text.trim();
+      String firstName = _firstNameController.text;
+      String lastName = _lastNameController.text;
+      String password = _passwordController.text.trim();
 
-      // Perform registration logic with the obtained values
-      // ...
+      FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
+          .then((userCredential) async {
+        await addUserDetails(firstName, lastName, email);
+        Navigator.pushReplacement(context, PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => const RestaurantPage(),
+        ));
+      })
+          .catchError((error) {
+        print("Error creating user: $error");
+      });
     }
   }
+
+  Future<void> addUserDetails(String firstName, String lastName, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'food_quantity': 0,
+    });
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +93,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           const SizedBox(height: 8),
 
           TextFormField(
-            controller: _nameController,
+            controller: _firstNameController,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -84,14 +105,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter a name';
+                return 'Please enter first name';
               }
               return null;
             },
           ),
           const SizedBox(height: 8),
           TextFormField(
-            controller: _surnameController,
+            controller: _lastNameController,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -102,7 +123,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter a surname';
+                return 'Please enter a last name';
               }
               return null;
             },

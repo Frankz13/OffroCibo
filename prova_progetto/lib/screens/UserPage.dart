@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:prova_progetto/read%20data/getUserName.dart';
+import 'package:prova_progetto/read%20data/getFoodData.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/widgets/BottomNavBar.dart';
 
