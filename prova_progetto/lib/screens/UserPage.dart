@@ -62,8 +62,8 @@ class _UserPageState extends State<UserPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            color: Colors.orange,
-                            shadowColor: Colors.purple,
+
+                            shadowColor: Colors.white,
                             elevation: 50,
                             margin: const EdgeInsets.all(20),
                             clipBehavior: Clip.hardEdge,
@@ -83,19 +83,21 @@ class _UserPageState extends State<UserPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       GetFoodName(documentId: docIds[index]),
-                                      const Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      const Text("Categoria/e: "),
+                                      GetCategory(documentId: docIds[index]),
+                                      Row(
                                         children: [
-                                          Text("pizza"),
-                                          Text("pasta"),
-                                          Text("dolci"),
-                                          Text("pesce"),
-                                          Text("carne"),
+                                          const Text("Quantità: "),
+                                          GetFoodQuantity(documentId: docIds[index]),
                                         ],
                                       ),
-                                      GetFoodQuantity(documentId: docIds[index]),
-                                      const Text('Ristorante:'),
-                                      GetRestaurantName(documentId: docIds[index]),
+                                      Row(
+                                        children: [
+                                          const Text('Ristorante: '),
+                                          GetRestaurantName(documentId: docIds[index]),
+                                        ],
+                                      ),
+
                                       const Text('Indirizzo:'),
                                       GetRestaurantAddress(documentId: docIds[index]),
                                       GetFoodDate(documentId: docIds[index]),

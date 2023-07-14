@@ -28,7 +28,7 @@ class ReusableWidgets {
         backgroundColor: MaterialStateProperty.all(Colors.green),
       ),
       onPressed: onPressed,
-      child: Text(text, style: const TextStyle(color: Colors.white)),  // Questo cambia il colore del testo
+      child: Text(text, style: const TextStyle(color: Colors.white)),  //
     );
   }
 

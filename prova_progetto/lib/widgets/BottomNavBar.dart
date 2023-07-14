@@ -28,11 +28,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
               onPressed: () {
                 Navigator.pushReplacement(context, PageRouteBuilder(
                   pageBuilder: (context, animation1, animation2) => const RestaurantPage(),
-                  transitionDuration: Duration(seconds: 1),
+                  transitionDuration: const Duration(seconds: 1),
                   transitionsBuilder: (context, animation, animationTime, child) {
                     animation = CurvedAnimation(parent: animation, curve: Curves.easeIn);
                     return SlideTransition(
-                      position: Tween(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0)).animate(animation),
+                      position: Tween(begin: const Offset(-1.0, 0.0), end: const Offset(0.0, 0.0)).animate(animation),
                       child: child,
                     );
                   },
