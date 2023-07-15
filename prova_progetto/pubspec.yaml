@@ -37,6 +37,7 @@ dependencies:
   datetime_picker_formfield_new: ^2.1.0
   intl: ^0.18.1
   firebase_storage: ^11.2.4
+  image_picker: ^1.0.1
 
 
 

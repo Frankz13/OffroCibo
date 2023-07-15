@@ -196,3 +196,30 @@ class GetCategory extends StatelessWidget {
         });
   }
 }
+
+
+class GetImageUrl extends StatelessWidget {
+
+  final String documentId;
+
+  const GetImageUrl({required this.documentId});
+
+  @override
+  Widget build(BuildContext context) {
+
+    CollectionReference foods = FirebaseFirestore.instance
+        .collection('food');
+
+    return StreamBuilder<DocumentSnapshot>(
+        stream: foods.doc(documentId).snapshots(),
+        builder: (context, snapshot){
+          if (snapshot.connectionState == ConnectionState.active){
+            var data = snapshot.data!.data() as Map<String, dynamic>;
+
+            return Image.network('${data['image_url']}',
+            fit: BoxFit.cover,);
+          }
+          return const Text('loading...');
+        });
+  }
+}

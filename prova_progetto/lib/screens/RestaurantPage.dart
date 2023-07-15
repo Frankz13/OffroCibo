@@ -85,11 +85,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                             children: [
                               AspectRatio(
                                 aspectRatio: 16 / 9,
-                                child: Image.asset(
-                                  'images/pizza.jpg',
-                                  fit: BoxFit.fill,
+                                child: GetImageUrl(documentId: docIds[index])
                                 ),
-                              ),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
@@ -135,6 +132,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                                                   date: docData['date'].toDate(),
                                                   quantity: docData['quantity'],
                                                   category: categoryList,
+                                                  imageUrl: docData['image_url']
                                                 )),
                                               );
                                             } else {

@@ -5,6 +5,8 @@ import 'package:prova_progetto/read%20data/getFoodData.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/widgets/BottomNavBar.dart';
 
+import '../widgets/ReausableWidgets.dart';
+
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
 
@@ -46,6 +48,15 @@ class _UserPageState extends State<UserPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              const Text(
+                "Barra di ricerca",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                "pizza pesce pasta carne dolci",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               Expanded(
                 child: FutureBuilder(
                   future: getDocId(),
@@ -53,7 +64,7 @@ class _UserPageState extends State<UserPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (docIds.isEmpty) {
-                      return const Center(child: Text("Per favore crea un' inserzione"));
+                      return const Center(child: Text("Wow abbiamo finito tutto! Sembra un sogno... oppure è un errore :( "));
                     } else {
                       return ListView.builder(
                         itemCount: docIds.length,
@@ -72,47 +83,31 @@ class _UserPageState extends State<UserPage> {
                               children: [
                                 AspectRatio(
                                   aspectRatio: 16 / 9,
-                                  child: Image.asset(
-                                    'images/pizza.jpg',
-                                    fit: BoxFit.fill,
-                                  ),
+                                  child: GetImageUrl(documentId: docIds[index])
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      GetFoodName(documentId: docIds[index]),
-                                      const Text("Categoria/e: "),
-                                      GetCategory(documentId: docIds[index]),
+                                      Center(child: GetFoodName(documentId: docIds[index])),
+
+                                      Center(child: GetCategory(documentId: docIds[index])),
                                       Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           const Text("Quantità: "),
                                           GetFoodQuantity(documentId: docIds[index]),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          const Text('Ristorante: '),
-                                          GetRestaurantName(documentId: docIds[index]),
-                                        ],
-                                      ),
+                                      Center(child: GetRestaurantName(documentId: docIds[index])),
 
-                                      const Text('Indirizzo:'),
-                                      GetRestaurantAddress(documentId: docIds[index]),
-                                      GetFoodDate(documentId: docIds[index]),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {},
-                                            child: const Icon(Icons.edit_note),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {},
-                                            child: const Icon(Icons.delete_forever),
-                                          ),
-                                        ],
+                                      Center(child: GetRestaurantAddress(documentId: docIds[index])),
+                                      Center(child: GetFoodDate(documentId: docIds[index])),
+
+                                      Center(
+                                        child: ReusableWidgets.buildButton('Ordina', (){}
+                                        ),
                                       ),
                                     ],
                                   ),

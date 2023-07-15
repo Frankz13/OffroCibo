@@ -1,8 +1,11 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:prova_progetto/widgets/ReausableWidgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -12,7 +15,7 @@ extension StringExtension on String {
 
 class AddingProductPage extends StatefulWidget {
   const AddingProductPage({Key? key}) : super(key: key);
-
+  
 
 
   @override
@@ -26,6 +29,9 @@ class _AddingProductPageState extends State<AddingProductPage> {
   final controllerRestaurantName = TextEditingController();
   final controllerRestaurantAddress = TextEditingController();
 
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+
 
 
 
@@ -38,6 +44,21 @@ class _AddingProductPageState extends State<AddingProductPage> {
     'Pesce',
     'Pizza',
   ];
+
+  Future pickImageGallery() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = File(pickedFile!.path);
+    });
+  }
+
+  Future pickImageCamera() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _image = File(pickedFile!.path);
+    });
+  }
+
 
 
   @override
@@ -88,38 +109,31 @@ class _AddingProductPageState extends State<AddingProductPage> {
                     const Text('Categoria: ',
                     style: TextStyle(
                       fontSize: 24,
-
                     ),
                       textAlign: TextAlign.center,
                     ),
                     Wrap(
-                      alignment: WrapAlignment.center,
-                    children: [
-                        for (var category in _categories)
-
-                          ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(
-                              selectedButtonCategory.contains(category) ? Colors.green : Colors.white,
-                            ),
-                            ),
-
-                              onPressed: (){
-                              setState(() {
-                               if (selectedButtonCategory.contains(category)){
-                                 selectedButtonCategory.remove(category);
-                               }else {
-                                 selectedButtonCategory.add(category);
-                               }
-
-                              });
-
-
-
-                          },
-                              child:Text(category,
-                                  style: TextStyle(
-                                      color: selectedButtonCategory.contains(category) ? Colors.white : Colors.black)))
-                      ]
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (var category in _categories)
+                            ElevatedButton(
+                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(
+                                  selectedButtonCategory.contains(category) ? Colors.green : Colors.white,
+                                ),
+                                ),
+                                onPressed: (){
+                                  setState(() {
+                                    if (selectedButtonCategory.contains(category)){
+                                      selectedButtonCategory.remove(category);
+                                    }else {
+                                      selectedButtonCategory.add(category);
+                                    }
+                                  });
+                                },
+                                child:Text(category,
+                                    style: TextStyle(
+                                        color: selectedButtonCategory.contains(category) ? Colors.white : Colors.black)))
+                        ]
                     ),
                     const SizedBox(height: 16),
 
@@ -137,8 +151,42 @@ class _AddingProductPageState extends State<AddingProductPage> {
                         controller: controllerDate,
                         hint: "Data di produzione:"),
                     const SizedBox(height: 24),
+                    const Text("Carica un'immagine:"),
 
-                ReusableWidgets.buildButton('Crea', () {
+
+
+                    (_image != null)
+                        ? Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: FileImage(_image!),
+                          fit: BoxFit.cover,
+                        )
+                      ),
+
+                    )
+                        : Container(
+                        height: 200,
+                        color: Colors.white60
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                        children: [
+                          ReusableWidgets.buildButton('Camera', () {
+                            pickImageCamera();
+                          }),
+                          ReusableWidgets.buildButton('Galleria', () {
+                            pickImageGallery();
+                          })
+                        ],
+                      ),
+                    ),
+                    ReusableWidgets.buildButton('Crea', () {
 
 
                   if(controllerNameProduct.text.isEmpty ||
@@ -195,9 +243,17 @@ class _AddingProductPageState extends State<AddingProductPage> {
     final docFood = FirebaseFirestore.instance.collection('food').doc();
     food.userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
+    final storage = FirebaseStorage.instance;
+    final ref = storage.ref().child('food_images').child('${docFood.id}.png');
+
+    String imageUrl = '';
+    if (_image != null) {
+      await ref.putFile(_image!);
+      imageUrl = await ref.getDownloadURL();
+    }
 
     final json = food.toJson();
-    await docFood.set(json);
+    await docFood.set({...json, 'image_url': imageUrl});
   }
 }
 
@@ -211,28 +267,26 @@ class Food {
   final List<String> category;
 
   Food({
-  required this.nameProduct,
-  required this.quantity,
-  required this.date,
-  required this.restaurantName,
-    required this.restaurantAddress,
     required this.userId,
+    required this.nameProduct,
+    required this.quantity,
+    required this.date,
+    required this.restaurantName,
+    required this.restaurantAddress,
     required this.category,
-
   });
 
   Map<String, dynamic> toJson() {
     return {
-
+      'user_id': userId,
       'name_product': nameProduct,
       'quantity': quantity,
-      'date': date,
+      'date': date != null ? Timestamp.fromDate(date!) : null,
       'restaurant_name': restaurantName,
       'restaurant_address': restaurantAddress,
-      'user_id': userId,
       'category': category,
+
     };
   }
 }
-
 

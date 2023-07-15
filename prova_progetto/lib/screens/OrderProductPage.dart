@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:prova_progetto/screens/AddingProductPage.dart';
 import 'package:prova_progetto/widgets/ReausableWidgets.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 
 class EditPage extends StatefulWidget {
@@ -17,7 +14,6 @@ class EditPage extends StatefulWidget {
   final DateTime date;
   final int quantity;
   final List<String> category;
-  String imageUrl;
 
   EditPage({
     required this.documentId,
@@ -27,7 +23,7 @@ class EditPage extends StatefulWidget {
     required this.date,
     required this.quantity,
     required this.category,
-    required this.imageUrl,
+    required imageUrl,
   });
 
   @override
@@ -42,64 +38,13 @@ class _EditPageState extends State<EditPage> {
   late final TextEditingController dateController;
   List<String> selectedButtonCategory = [];
 
-  File? _image;
-  late final ImagePicker _picker = ImagePicker();
-  late final FirebaseStorage _storage = FirebaseStorage.instance;
-
-  Future<void> pickImageGallery() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final file =File(pickedFile.path);
-      setState(() {
-        _image = file;
-      });
-    } else {
-      print('No image selected.');
-    }
-  }
-
-  Future<void> pickImageCamera() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      final file =File(pickedFile.path);
-      setState(() {
-        _image = file;
-      });
-    } else {
-      print('No image selected.');
-    }
-  }
-
-
-  Future<String?> uploadImage() async {
-    if (_image != null) {
-      final snapshot = await _storage.ref('images/${widget.documentId}').putFile(_image!);
-      return await snapshot.ref.getDownloadURL();
-    }
-    return null;
-  }
-
   Future<void> updateFood(Food food) async {
-    food.userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-    final json = food.toJson();
-
-    // upload the image and get the URL
-    String? imageUrl = await uploadImage();
-
-    if (imageUrl != null) {
-      json['image_url'] = imageUrl;
-    }
-
     final docFood =
     FirebaseFirestore.instance.collection('food').doc(widget.documentId);
-
+    food.userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final json = food.toJson();
     await docFood.update(json);
   }
-
-
-
 
   @override
   void initState() {
@@ -230,41 +175,6 @@ class _EditPageState extends State<EditPage> {
                     ReusableWidgets.buildDateTimeField(
                         controller: dateController,
                         hint: "Data di produzione:"),
-                    const SizedBox(height: 16),
-                    Column(
-                      children: [
-                        _image == null
-                        ? Container(
-                          height: 200,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(widget.imageUrl),
-                                fit: BoxFit.cover,
-                              )
-                            ),
-                            )
-                        : Container(
-                          height: 200,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: FileImage(_image!),
-                                fit: BoxFit.cover,
-                              )
-                            ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ReusableWidgets.buildButton('Camera', () {
-                              pickImageCamera();
-                            }),
-                            ReusableWidgets.buildButton('Galleria', () {
-                              pickImageGallery();
-                            }),
-                          ],
-                        )
-                      ],
-                    ),
                     const SizedBox(height: 24),
 
                     ReusableWidgets.buildButton('Modifica', () {
@@ -302,7 +212,6 @@ class _EditPageState extends State<EditPage> {
                           userId: '',
                         );
                         updateFood(food);
-
                         Navigator.pop(context);
                       }
                     }),
