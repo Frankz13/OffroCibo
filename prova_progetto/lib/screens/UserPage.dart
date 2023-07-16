@@ -17,6 +17,17 @@ class _UserPageState extends State<UserPage> {
   List<String> docIds = [];
   final TextEditingController searchController = TextEditingController();
   late Future getDocFuture;
+  List<String> selectedButtonCategory = [];
+
+
+  static const List<String> _categories = [
+    'Pasta',
+    'Pizza',
+    'Carne',
+    'Pesce',
+    'Fritto',
+    'Dolce',
+  ];
 
   @override
   void initState() {
@@ -27,16 +38,33 @@ class _UserPageState extends State<UserPage> {
   Future getDocId(String searchTerm) async {
     docIds = [];
     QuerySnapshot snapshot;
-    if (searchTerm.isEmpty){
-      snapshot = await FirebaseFirestore.instance.collection('food').get();
-    }else {
-      snapshot = await FirebaseFirestore.instance
-          .collection('food')
-          .where('restaurant_name', isEqualTo: searchTerm)
-          .get();}
+    snapshot = await FirebaseFirestore.instance.collection('food').get();
+
     snapshot.docs.forEach((document) {
-      docIds.add(document.reference.id);
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+      List<String> documentCategories = List<String>.from(data['category']);
+
+      if ((searchTerm.isEmpty || data['restaurant_name'] == searchTerm) &&
+          (selectedButtonCategory.isEmpty || documentCategories.any((element) => selectedButtonCategory.contains(element)))) {
+        docIds.add(document.reference.id);
+      }
     });
+  }
+
+  Future<int> getUserFoodQuantity() async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users')
+        .where('firebase_auth_user_id', isEqualTo: userId)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null && data.containsKey('food_quantity')) {
+        return data['food_quantity'] ?? 0;
+      }
+    }
+    return 0;
   }
 
   @override
@@ -94,9 +122,46 @@ class _UserPageState extends State<UserPage> {
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            const Text(
-              "pizza pesce pasta carne dolci fritto",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var category in _categories)
+                      ElevatedButton(
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(
+                            selectedButtonCategory.contains(category) ? Colors.green : Colors.white,
+                          ),
+                          ),
+                          onPressed: (){
+                            setState(() {
+                              if (selectedButtonCategory.contains(category)){
+                                selectedButtonCategory.remove(category);
+                              }else {
+                                selectedButtonCategory.add(category);
+                              }
+                              getDocFuture = getDocId(searchController.text);
+                            });
+                          },
+                          child:Text(category,
+                              style: TextStyle(
+                                  color: selectedButtonCategory.contains(category) ? Colors.white : Colors.black)))
+                  ]
+              ),
+            ),
+
+            FutureBuilder<int>(
+              future: getUserFoodQuantity(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else {
+                  return Text("Cibo recuperato = ${snapshot.data}",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),);
+                }
+              },
             ),
             Expanded(
               child: FutureBuilder(
