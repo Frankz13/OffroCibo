@@ -38,11 +38,12 @@ class _AddingProductPageState extends State<AddingProductPage> {
   List<String> selectedButtonCategory = [];
 
   static const List<String> _categories = [
-    'Carne',
-    'Dolce',
     'Pasta',
-    'Pesce',
     'Pizza',
+    'Carne',
+    'Pesce',
+    'Fritto',
+    'Dolce',
   ];
 
   Future pickImageGallery() async {

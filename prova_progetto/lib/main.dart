@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/screens/Registrazione.dart';
 import 'package:prova_progetto/screens/RestaurantPage.dart';
-import 'package:prova_progetto/screens/SecondaPagina.dart';
+
 import 'package:prova_progetto/screens/UserPage.dart';
 
 
@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       home: const MyHomePage(title: 'OffroCibo_offerte'),
       routes: {
-        '/prima': (context) => RestaurantPage(),
-        '/seconda': (context) => SecondaPagina(),
+
         '/registrazione' : (context) => Registrazione(),
         '/login' : (context) => LoginPage(),
         '/userPage' : (context) => UserPage(),

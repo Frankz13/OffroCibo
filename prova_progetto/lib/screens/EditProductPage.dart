@@ -129,11 +129,16 @@ class _EditPageState extends State<EditPage> {
   @override
   Widget build(BuildContext context) {
     const List<String> _categories = [
-      'Carne',
-      'Dolce',
       'Pasta',
-      'Pesce',
       'Pizza',
+      'Carne',
+      'Pesce',
+      'Fritto',
+      'Dolce',
+
+
+
+
     ];
 
     return Scaffold(

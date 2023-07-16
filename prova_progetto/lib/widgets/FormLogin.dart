@@ -43,6 +43,7 @@ class _LoginFormState extends State<LoginForm> {
         children: [
                 TextFormField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -69,6 +70,7 @@ class _LoginFormState extends State<LoginForm> {
 
                 TextFormField(
                   controller: _passwordController,
+
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
