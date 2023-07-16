@@ -66,7 +66,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (docIds.isEmpty) {
-                    return const Center(child: Text("Per favore crea un' inserzione"));
+                    return const Center(child: Text("Per favore crea un' inserzione :)"));
                   } else {
                     return ListView.builder(
                       itemCount: docIds.length,

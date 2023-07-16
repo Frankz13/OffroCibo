@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prova_progetto/screens/Login.dart';
 import 'package:prova_progetto/screens/Registrazione.dart';
-import 'package:prova_progetto/screens/RestaurantPage.dart';
+
 
 import 'package:prova_progetto/screens/UserPage.dart';
 
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
 
         useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(),
+      //darkTheme: ThemeData.dark(),
       home: const MyHomePage(title: 'OffroCibo_offerte'),
       routes: {
 

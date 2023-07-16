@@ -67,6 +67,34 @@ class _UserPageState extends State<UserPage> {
     return 0;
   }
 
+  Future<bool> orderFood(String foodDocumentId, String userId) async {
+    try {
+      DocumentSnapshot foodSnapshot = await FirebaseFirestore.instance.collection('food').doc(foodDocumentId).get();
+      Map<String, dynamic> foodData = foodSnapshot.data() as Map<String, dynamic>;
+      int foodQuantity = foodData['quantity'] ?? 0;
+
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').where('firebase_auth_user_id', isEqualTo: userId).get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        DocumentSnapshot userDocSnapshot = userSnapshot.docs.first;
+        Map<String, dynamic> userData = userDocSnapshot.data() as Map<String, dynamic>;
+        int userFoodQuantity = userData['food_quantity'] ?? 0;
+
+        await FirebaseFirestore.instance.collection('users').doc(userDocSnapshot.id).update({
+          'food_quantity': userFoodQuantity + foodQuantity,
+        });
+      }
+
+      await FirebaseFirestore.instance.collection('food').doc(foodDocumentId).delete();
+      return true;  // Order was successful
+    } catch (e) {
+      print(e.toString());
+      return false;  // An error occurred
+    }
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,7 +187,7 @@ class _UserPageState extends State<UserPage> {
                   return Text("Error: ${snapshot.error}");
                 } else {
                   return Text("Cibo recuperato = ${snapshot.data}",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),);
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),);
                 }
               },
             ),
@@ -170,7 +198,8 @@ class _UserPageState extends State<UserPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (docIds.isEmpty) {
-                    return const Center(child: Text("Wow abbiamo finito tutto! Sembra un sogno... oppure c'è un errore :( "));
+                    return const Center(child: Text("Wow abbiamo finito tutto! Sembra un sogno... oppure c'è un errore :( ",
+                    textAlign: TextAlign.center,));
                   } else {
                     return ListView.builder(
                       itemCount: docIds.length,
@@ -212,7 +241,41 @@ class _UserPageState extends State<UserPage> {
                                     Center(child: GetFoodDate(documentId: docIds[index])),
 
                                     Center(
-                                      child: ReusableWidgets.buildButton('Ordina', (){}
+                                      child: ReusableWidgets.buildButton('Ordina', (){
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context)
+                                        {
+                                          return AlertDialog(
+                                            title: const Text('Conferma ordine'),
+                                            content: const Text("Sei sicuro di voler confermare l'ordine?"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child:
+                                              const Text('Annulla')),
+                                              TextButton(onPressed: () async {
+                                                String userId = FirebaseAuth.instance.currentUser!.uid;
+                                                bool orderSuccess = await orderFood(docIds[index], userId);
+                                                Navigator.of(context).pop();
+
+                                                if (orderSuccess) {
+                                                  setState(() {
+                                                    getDocFuture = getDocId(searchController.text);
+                                                  });
+                                                } else {
+                                                  const Text('Errore');
+                                                }
+
+
+                                              },
+                                                  child: const Text("Conferma"))
+                                            ],
+                                          );
+                                        });
+                                      }
                                       ),
                                     ),
                                   ],
